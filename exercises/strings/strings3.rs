@@ -3,21 +3,84 @@
 // Execute `rustlings hint strings3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 fn trim_me(input: &str) -> String {
     // TODO: Remove whitespace from both ends of a string!
-    ???
+    let mut out = String::from("");
+    let mut iter = input.chars();
+    let mut c = iter.next();
+    let mut whites = 0;
+    let mut left = true;
+    loop {
+        match c {
+            Some(c) => {
+                if !c.is_whitespace() {
+                    out += &" ".repeat(whites);
+                    out += &c.to_string();
+                    whites = 0;
+                    left = false;
+                } else if !left {
+                    whites+=1;
+                }
+            },
+            _ => return out
+        }
+        c = iter.next();
+    }
 }
 
 fn compose_me(input: &str) -> String {
     // TODO: Add " world!" to the string! There's multiple ways to do this!
-    ???
+    String::from(input) + &" world!"
 }
 
 fn replace_me(input: &str) -> String {
     // TODO: Replace "cars" in the string with "balloons"!
-    ???
+    let mut target = String::from("cars");
+    let mut log = String::from("");
+    let mut out = String::from("");
+    let mut iter = input.chars();
+    let mut c = iter.next();
+    loop {
+        match c {
+            Some(c) => {
+                match log.as_str() {
+                     "cars" => {
+                        for _ in 0..target.len() {
+                            out.pop();
+                        }
+                        out += "balloons";
+                         out += &c.to_string();
+                        log = String::from("");
+                    }
+                    _ => {
+                        out += &c.to_string();
+                        if (log.len() > target.len()-1)
+                        {
+                            log = log[1..].to_string();
+                        }
+                    }
+                }
+                log += &c.to_string();
+            }
+
+            _ => {
+                match log.as_str() {
+                    "cars" => {
+                        for _ in 0..target.len() {
+                            out.pop();
+                        }
+                        out += "balloons";
+                        return out;
+                    },
+                    _ => {
+                        return out;
+                    }
+                }
+
+            }
+        }
+        c = iter.next();
+    }
 }
 
 #[cfg(test)]
@@ -26,8 +89,8 @@ mod tests {
 
     #[test]
     fn trim_a_string() {
+        assert_eq!(trim_me("     What's up!"), "What's up!");
         assert_eq!(trim_me("Hello!     "), "Hello!");
-        assert_eq!(trim_me("  What's up!"), "What's up!");
         assert_eq!(trim_me("   Hola!  "), "Hola!");
     }
 
